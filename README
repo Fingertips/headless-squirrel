@@ -1,0 +1,21 @@
+= JS-Test-san
+
+A JavaScript test runner to run JavaScript tests from the comfort of your
+terminal.
+
+== Why?
+
+Because we want to run tests in a real browser environment, in our case WebKit.
+
+And we want to write the tests in a way that we can easily run them on other
+browsers as well, you know, html and js…
+
+== Example:
+
+This is the output of the current napkin code:
+
+  $ ruby js-test-san.rb test/truncate_test.html
+
+  Running `Truncate Test'
+  => running...
+  => 3 tests, 8 assertions, 0 failures, 0 errors
