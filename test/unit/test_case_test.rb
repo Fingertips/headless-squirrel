@@ -65,16 +65,21 @@ describe "JSTestSan::TestCase, when running" do
     @test_case.webView_didFinishLoadForFrame(nil, nil)
   end
   
+  it "should register itself as an event handler for DOMSubtreeModified events on the `loglines' element" do
+    @test_case.loglines.expects(:addEventListener___).with('DOMSubtreeModified', @test_case, true)
+    @test_case.webView_didFinishLoadForFrame(nil, nil)
+  end
+  
   it "should not have finished yet if the inner html of the `log' element is `running...'" do
     @test_case.instance_variable_set(:@finished, nil)
     @test_case.log.stubs(:innerText).returns('running...')
-    @test_case.handleEvent
+    @test_case.handleEvent(stubbed_log_event)
     @test_case.should.not.be.finished
   end
   
   it "should have finished once the inner html of the `log' element is not longer `running...'" do
     @test_case.instance_variable_set(:@finished, nil)
-    @test_case.handleEvent
+    @test_case.handleEvent(stubbed_log_event)
     @test_case.should.be.finished
   end
   
@@ -85,9 +90,22 @@ describe "JSTestSan::TestCase, when running" do
     @test_case.errors.should     == 1
   end
   
-  it "should let the delegate know its finished running" do
+  it "should let its delegate know its finished running" do
     @delegate.expects(:test_case_finished).with(@test_case)
-    @test_case.handleEvent
+    @test_case.handleEvent(stubbed_log_event)
+  end
+  
+  %w{ passed failed error }.each do |type|
+    it "should let its delegate know a test ran if the targets class is `#{type}'" do
+      @delegate.expects(:test_ran)
+      @test_case.handleEvent(stubbed_loglines_event(type))
+    end
+  end
+  
+  it "should not let its delegate know a test ran if the targets class is not one of passed, failed, or error" do
+    @delegate.expects(:test_ran).never
+    @test_case.handleEvent(stubbed_loglines_event(''))
+    @test_case.handleEvent(stubbed_loglines_event('foo'))
   end
   
   private
@@ -95,5 +113,15 @@ describe "JSTestSan::TestCase, when running" do
   def run_test_case!
     @test_case.run
     sleep 0.25 while not @test_case.finished?
+  end
+  
+  def stubbed_log_event
+    stub('Event', :target => @test_case.log.firstChild)
+  end
+  
+  def stubbed_loglines_event(klass)
+    element = @test_case.loglines.firstChild
+    element.stubs(:className).returns(klass.to_ns)
+    stub('Event', :target => element)
   end
 end

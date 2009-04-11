@@ -51,8 +51,20 @@ describe "JSTestSan::Runner" do
   
   it "should run the tests cases and start a runloop" do
     @runner.test_cases.first.expects(:run)
+    @runner.run
+  end
+  
+  it "should start a runloop when running the tests" do
     OSX::NSApplication.sharedApplication.expects(:run)
     @runner.run
+  end
+  
+  it "should store the start time" do
+    time = Time.now
+    Time.stubs(:now).returns(time)
+    
+    @runner.run
+    @runner.instance_variable_get(:@start_time).should == time
   end
   
   it "should keep a `queued' stack which contains all test cases that are running" do
@@ -72,10 +84,27 @@ describe "JSTestSan::Runner" do
     @runner.test_case_finished(@runner.test_cases.last)
     @runner.should.be.finished
   end
+  
+  it "should print a dot when a test ran" do
+    @runner.expects(:print).with('.')
+    @runner.test_ran
+  end
 end
 
 describe "JSTestSan::Runner, when finalizing" do
   include RunnerTestHelper
+  
+  def setup
+    super
+    time = Time.now
+    @runner.instance_variable_set(:@start_time, time)
+    Time.stubs(:now).returns(time + 2.3)
+  end
+  
+  it "should print the time it took to run the tests" do
+    @runner.expects(:puts).with("\nFinished in 2.3 seconds.")
+    @runner.send(:finalize)
+  end
   
   it "should print the total amount of tests, assertions, failures, and errors that have been ran" do
     @runner.test_cases.each do |tc|
@@ -85,7 +114,7 @@ describe "JSTestSan::Runner, when finalizing" do
       tc.stubs(:errors).returns(1)
     end
     
-    @runner.expects(:puts).with("6 tests, 4 assertions, 2 failures, 2 errors")
+    @runner.expects(:puts).with("\n6 tests, 4 assertions, 2 failures, 2 errors")
     @runner.send(:finalize)
   end
   

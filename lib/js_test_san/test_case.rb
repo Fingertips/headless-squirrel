@@ -44,11 +44,20 @@ module JSTestSan
     # Not yet sure why the extra check for log not being nil is necessary.
     # Might be a test only thing.
     def webView_didFinishLoadForFrame(webView, frame)
-      log.addEventListener___('DOMSubtreeModified', self, true) if log
+      [log, loglines].each do |element|
+        element.addEventListener___('DOMSubtreeModified', self, true) if element
+      end
     end
     
-    def handleEvent(event = nil)
-      finalize unless log.innerText == 'running...'
+    def handleEvent(event)
+      case event.target
+      when OSX::DOMText
+        finalize unless log.innerText == 'running...'
+      else
+        if @delegate.respond_to?(:test_ran) && %w{ passed failed error }.include?(event.target.className)
+          @delegate.test_ran
+        end
+      end
     end
     
     private

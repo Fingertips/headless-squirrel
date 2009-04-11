@@ -12,11 +12,14 @@ module JSTestSan
         end
         @queued = @test_cases.dup
         
+        $stdout.sync = true
+        
         self
       end
     end
     
     def run
+      @start_time = Time.now
       @queued.first.run
       OSX::NSApplication.sharedApplication.run
     end
@@ -25,6 +28,10 @@ module JSTestSan
     def assertions; sum :assertions end
     def failures;   sum :failures   end
     def errors;     sum :errors     end
+    
+    def test_ran
+      print '.'
+    end
     
     def test_case_finished(test_case)
       @queued.delete(test_case)
@@ -43,7 +50,8 @@ module JSTestSan
     
     def finalize
       @finished = true
-      puts "#{tests} tests, #{assertions} assertions, #{failures} failures, #{errors} errors"
+      puts "\nFinished in #{Time.now - @start_time} seconds."
+      puts "\n#{tests} tests, #{assertions} assertions, #{failures} failures, #{errors} errors"
       OSX::NSApplication.sharedApplication.terminate(self)
     end
   end
