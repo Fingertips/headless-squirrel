@@ -85,9 +85,19 @@ describe "JSTestSan::Runner" do
     @runner.should.be.finished
   end
   
-  it "should print a dot when a test ran" do
+  it "should print a dot when a test ran and passed" do
     @runner.expects(:print).with('.')
-    @runner.test_ran
+    @runner.test_ran(:passed)
+  end
+  
+  it "should print a F when a test ran and failed" do
+    @runner.expects(:print).with('F')
+    @runner.test_ran(:failed)
+  end
+  
+  it "should print an E when a test ran and an error occured" do
+    @runner.expects(:print).with('E')
+    @runner.test_ran(:error)
   end
 end
 

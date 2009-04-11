@@ -50,13 +50,13 @@ module JSTestSan
     end
     
     def handleEvent(event)
-      case event.target
+      element = event.target
+      case element
       when OSX::DOMText
         finalize unless log.innerText == 'running...'
       else
-        if @delegate.respond_to?(:test_ran) && %w{ passed failed error }.include?(event.target.className)
-          @delegate.test_ran
-        end
+        klass = element.className
+        @delegate.test_ran(klass.to_sym) if %w{ passed failed error }.include?(klass)
       end
     end
     
@@ -77,7 +77,7 @@ module JSTestSan
       @finished = true
       results = log.innerText.to_s.scan(RESULTS_REGEXP).first
       @tests, @assertions, @failures, @errors = results.map { |x| x.to_i }
-      @delegate.test_case_finished(self) if @delegate.respond_to?(:test_case_finished)
+      @delegate.test_case_finished(self)
     end
   end
 end

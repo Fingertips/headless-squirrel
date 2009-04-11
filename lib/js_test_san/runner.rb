@@ -29,8 +29,15 @@ module JSTestSan
     def failures;   sum :failures   end
     def errors;     sum :errors     end
     
-    def test_ran
-      print '.'
+    def test_ran(state)
+      print case state
+      when :passed
+        '.'
+      when :failed
+        'F'
+      when :error
+        'E'
+      end
     end
     
     def test_case_finished(test_case)

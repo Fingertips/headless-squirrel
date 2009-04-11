@@ -2,17 +2,18 @@ require File.expand_path('../../test_helper', __FILE__)
 
 describe "JSTestSan::TestCase" do
   before do
-    @test_case = JSTestSan::TestCase.alloc.initWithHTMLFile_delegate(fixture('a_unit_test.html'), self)
+    @delegate = stub_everything('delegate')
+    @test_case = JSTestSan::TestCase.alloc.initWithHTMLFile_delegate(fixture('a_unit_test.html'), @delegate)
   end
   
   it "should initialize with a html file and delegate" do
     @test_case.html_file.should == fixture('a_unit_test.html')
-    @test_case.delegate.should == self
+    @test_case.delegate.should == @delegate
   end
   
   it "should raise a FileDoesNotExistError if the given html file does not exist" do
     lambda {
-      JSTestSan::TestCase.alloc.initWithHTMLFile_delegate('/does/not/exist/test.html', self)
+      JSTestSan::TestCase.alloc.initWithHTMLFile_delegate('/does/not/exist/test.html', @delegate)
     }.should.raise JSTestSan::TestCase::FileDoesNotExistError
   end
   
@@ -41,7 +42,7 @@ end
 
 describe "JSTestSan::TestCase, when running" do
   before do
-    @delegate = mock('delegate')
+    @delegate = stub_everything('delegate')
     @test_case = JSTestSan::TestCase.alloc.initWithHTMLFile_delegate(fixture('a_unit_test.html'), @delegate)
     run_test_case!
   end
@@ -97,7 +98,7 @@ describe "JSTestSan::TestCase, when running" do
   
   %w{ passed failed error }.each do |type|
     it "should let its delegate know a test ran if the targets class is `#{type}'" do
-      @delegate.expects(:test_ran)
+      @delegate.expects(:test_ran).with(type.to_sym)
       @test_case.handleEvent(stubbed_loglines_event(type))
     end
   end
