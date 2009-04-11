@@ -52,6 +52,12 @@ describe "JSTestSan::TestCase, when running" do
   
   it "should return the `log' element" do
     @test_case.log.should.be.instance_of OSX::DOMHTMLDivElement
+    @test_case.log.className.should == 'logsummary'
+  end
+  
+  it "should return the `loglines' element" do
+    @test_case.loglines.should.be.instance_of OSX::DOMHTMLTableSectionElement
+    @test_case.loglines.className.should == 'loglines'
   end
   
   it "should register itself as an event handler for DOMSubtreeModified events on the `log' element" do

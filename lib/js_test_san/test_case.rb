@@ -37,6 +37,10 @@ module JSTestSan
       document.getElementsByClassName('logsummary').item(0)
     end
     
+    def loglines
+      document.getElementsByClassName('loglines').item(0)
+    end
+    
     # Not yet sure why the extra check for log not being nil is necessary.
     # Might be a test only thing.
     def webView_didFinishLoadForFrame(webView, frame)
