@@ -1,9 +1,8 @@
-require 'rake/testtask'
-
 task :default => :test
 
-Rake::TestTask.new do |t|
-  t.test_files = Dir['test/unit/*_test.rb']
+desc "Run the tests"
+task :test do
+  sh "specrb -s #{Dir['test/unit/*_test.rb'].join(' ')}"
 end
 
 # JSTestSan::Rake::Runner.new :regression do |t|

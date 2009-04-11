@@ -61,12 +61,8 @@ describe "JSTestSan::TestCase, when running" do
     @test_case.loglines.className.should == 'loglines'
   end
   
-  it "should register itself as an event handler for DOMSubtreeModified events on the `log' element" do
+  it "should register itself as an event handler for DOMSubtreeModified events on the `log' and `loglines' element" do
     @test_case.log.expects(:addEventListener___).with('DOMSubtreeModified', @test_case, true)
-    @test_case.webView_didFinishLoadForFrame(nil, nil)
-  end
-  
-  it "should register itself as an event handler for DOMSubtreeModified events on the `loglines' element" do
     @test_case.loglines.expects(:addEventListener___).with('DOMSubtreeModified', @test_case, true)
     @test_case.webView_didFinishLoadForFrame(nil, nil)
   end
