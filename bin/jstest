@@ -1,17 +1,6 @@
 #!/usr/bin/env ruby
 
-require File.expand_path('../../lib/js_test_san/test_case', __FILE__)
+$:.unshift File.expand_path('../../lib', __FILE__)
+require 'js_test_san'
 
-class D < OSX::NSObject
-  def test_case_finished(tc)
-    p tc.tests, tc.assertions, tc.failures, tc.errors
-    OSX::NSApplication.sharedApplication.terminate(self)
-  end
-end
-
-delegate = D.alloc.init
-
-tc = JSTestSan::TestCase.alloc.initWithHTMLFile_delegate(ARGV[0], delegate)
-tc.run
-
-OSX::NSApplication.sharedApplication.run
+JSTestSan::Runner.alloc.initWithHTMLFiles(ARGV).run

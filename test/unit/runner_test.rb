@@ -10,7 +10,7 @@ module RunnerTestHelper
     @runner.test_cases.last.stubs(:run)
     
     OSX::NSApplication.sharedApplication.stubs(:run)
-    OSX::NSApplication.sharedApplication.stubs(:stop)
+    OSX::NSApplication.sharedApplication.stubs(:terminate)
   end
 end
 
@@ -89,8 +89,8 @@ describe "JSTestSan::Runner, when finalizing" do
     @runner.send(:finalize)
   end
   
-  it "should end the runloop" do
-    OSX::NSApplication.sharedApplication.expects(:stop).with(@runner)
+  it "should terminate the application" do
+    OSX::NSApplication.sharedApplication.expects(:terminate).with(@runner)
     @runner.send(:finalize)
   end
 end

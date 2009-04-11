@@ -48,7 +48,7 @@ module JSTestSan
     def finalize
       @finished = true
       puts "#{tests} tests, #{assertions} assertions, #{failures} failures, #{errors} errors"
-      OSX::NSApplication.sharedApplication.stop(self)
+      OSX::NSApplication.sharedApplication.terminate(self)
     end
   end
 end
