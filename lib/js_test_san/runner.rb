@@ -2,26 +2,22 @@ require 'osx/cocoa'
 
 module JSTestSan
   class Runner < OSX::NSObject
-    attr_reader :test_cases, :running
+    attr_reader :test_cases, :queued
     
     def initWithHTMLFiles(html_files)
       if init
         @test_cases = []
-        @running = []
-        
         html_files.each do |file|
           @test_cases << TestCase.alloc.initWithHTMLFile_delegate(file, self)
         end
+        @queued = @test_cases.dup
         
         self
       end
     end
     
     def run
-      @test_cases.each do |test_case|
-        test_case.run
-        @running << test_case
-      end
+      @queued.first.run
       OSX::NSApplication.sharedApplication.run
     end
     
@@ -31,8 +27,8 @@ module JSTestSan
     def errors;     sum :errors     end
     
     def test_case_finished(test_case)
-      @running.delete(test_case)
-      finalize if @running.empty?
+      @queued.delete(test_case)
+      @queued.empty? ? finalize : @queued.first.run
     end
     
     def finished?

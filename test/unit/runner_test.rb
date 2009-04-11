@@ -55,18 +55,18 @@ describe "JSTestSan::Runner" do
     @runner.run
   end
   
-  it "should keep a `running' stack which contains all test cases that are running" do
+  it "should keep a `queued' stack which contains all test cases that are running" do
     @runner.run
-    @runner.running.should == @runner.test_cases
+    @runner.queued.should == @runner.test_cases
   end
   
-  it "should remove a finished test case from the `running' stack" do
+  it "should remove a finished test case from the `queued' stack" do
     @runner.run
     @runner.test_case_finished(@runner.test_cases.first)
-    @runner.running.should == [@runner.test_cases.last]
+    @runner.queued.should == [@runner.test_cases.last]
   end
   
-  it "should have finished once the `running' stack is empty" do
+  it "should have finished once the `queued' stack is empty" do
     @runner.run
     @runner.test_case_finished(@runner.test_cases.first)
     @runner.test_case_finished(@runner.test_cases.last)
