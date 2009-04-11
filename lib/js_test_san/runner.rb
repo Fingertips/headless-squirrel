@@ -32,12 +32,23 @@ module JSTestSan
     
     def test_case_finished(test_case)
       @running.delete(test_case)
+      finalize if @running.empty?
+    end
+    
+    def finished?
+      @finished
     end
     
     private
     
     def sum(attr)
       @test_cases.inject(0) { |sum, tc| sum += tc.send(attr) }
+    end
+    
+    def finalize
+      @finished = true
+      puts "#{tests} tests, #{assertions} assertions, #{failures} failures, #{errors} errors"
+      OSX::NSApplication.sharedApplication.stop(self)
     end
   end
 end
