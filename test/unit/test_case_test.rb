@@ -1,5 +1,11 @@
 require File.expand_path('../../test_helper', __FILE__)
 
+describe "JSTestSan::TestCase, class methods" do
+  it "should return a shared WebView instance" do
+    JSTestSan::TestCase.sharedWebView.should.be.instance_of OSX::WebView
+  end
+end
+
 describe "JSTestSan::TestCase" do
   before do
     @delegate = stub_everything('delegate')
@@ -18,7 +24,7 @@ describe "JSTestSan::TestCase" do
   end
   
   it "should instantiate a WebView with the html file and set itself as the frameLoadDelegate" do
-    @test_case.webView.should.be.instance_of OSX::WebView
+    @test_case.webView.should == JSTestSan::TestCase.sharedWebView
     @test_case.webView.mainFrameURL.should == "file://#{fixture('a_unit_test.html')}"
     @test_case.webView.frameLoadDelegate.should == @test_case
   end

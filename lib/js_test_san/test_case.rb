@@ -5,6 +5,10 @@ module JSTestSan
   class TestCase < OSX::NSObject
     class FileDoesNotExistError < StandardError; end
     
+    def self.sharedWebView
+      @sharedWebView ||= OSX::WebView.alloc.init
+    end
+    
     attr_reader :html_file, :delegate
     attr_reader :tests, :assertions, :failures, :errors
     
@@ -65,7 +69,7 @@ module JSTestSan
     def load_webView
       url = OSX::NSURL.fileURLWithPath(@html_file)
       req = OSX::NSURLRequest.requestWithURL(url)
-      webView = OSX::WebView.alloc.init
+      webView = self.class.sharedWebView
       webView.mainFrame.loadRequest(req)
       webView.frameLoadDelegate = self
       webView
