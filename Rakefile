@@ -9,9 +9,21 @@ end
 #   t.files = Dir['test/regression/prototype/unit/*.html']
 # end
 
-desc "Run the regression tests"
+desc "Run all the regression tests"
 task :ci do
-  sh "./bin/jstest #{Dir['test/regression/prototype/unit/*.html'].join(' ')}"
+  sh "./bin/jstest #{Dir['test/regression/**/unit/*_test.html'].join(' ')}"
+end
+
+namespace :ci do
+  desc "Run the prototype regression tests"
+  task :prototype do
+    sh "./bin/jstest #{Dir['test/regression/prototype/unit/*_test.html'].join(' ')}"
+  end
+  
+  desc "Run the scriptaculous regression tests"
+  task :scriptaculous do
+    sh "./bin/jstest #{Dir['test/regression/scriptaculous/unit/*_test.html'].join(' ')}"
+  end
 end
 
 begin
