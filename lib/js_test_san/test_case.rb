@@ -61,13 +61,22 @@ module JSTestSan
       end
     end
     
-    # Catches file load errors:
+    # Catches resource load errors:
     #
     # webView.resourceLoadDelegate = self
+    #
     # def webView_resource_didFailLoadingWithError_fromDataSource(w,r,e,d)
     #   message = "#{e.userInfo['NSLocalizedDescription']}: #{e.userInfo['NSErrorFailingURLStringKey']}"
     #   @delegate.test_ran(Test.new(self, "Unable to load test case", :failed, message))
     #   @delegate.test_case_finished(self)
+    # end
+    
+    # Logs js errors:
+    #
+    # webView.setUIDelegate(self)
+    #
+    # def webView_addMessageToConsole(_, msg)
+    #   p msg
     # end
     
     def handleEvent(event)
