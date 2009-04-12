@@ -1,21 +1,81 @@
-= JS-Test-san
+= JSTestSan
 
 A JavaScript test runner to run JavaScript tests from the comfort of your
 terminal.
 
 == Why?
 
-Because we want to run tests in a real browser environment, in our case WebKit.
+Because we want to run tests in a real browser environment, in our case WebKit,
+but in the same fashion we run out other (Rails) unit tests.
 
 And we want to write the tests in a way that we can easily run them on other
-browsers as well, you know, html and js…
+browsers as well, you know, html and js… This way we can run the tests from the
+terminal during regular development but still test on other browsers by loading
+the html/js files manually.
+
+== Install & Usage
+
+  $ sudo gem install alloy-js-test-san -s http://gems.github.com
+  $ jstest path/to/a/unit_test.html
+
+== Problems?
+
+You betcha! (See the example.)
+
+But these shouldn't likely be a typical use case outside of testing the
+Prototype implementation, I hope. So it actually works quite well seeing how
+many tests pass ;)
 
 == Example:
 
-This is the output of the current napkin code:
+This is the output of the regression tests which are the Prototype unit tests:
 
-  $ ruby js-test-san.rb test/truncate_test.html
+  $ ./bin/jstest test/regression/prototype/unit/*_test.html
+  EEFF.......F..............................................................................................................................F
+  ..............................................................F............................................................................
+  ..............................................................................
 
-  Running `Truncate Test'
-  => running...
-  => 3 tests, 8 assertions, 0 failures, 0 errors
+    1) Error:
+  testSynchronousRequest (Unit test file | Ajax | default template | 2009-04-11 15:28) [test/regression/prototype/unit/ajax_test.html]:
+  TypeError: Null value, error=(TypeError: Null value)
+
+    2) Error:
+  testAsynchronousRequest (Unit test file | Ajax | default template | 2009-04-11 15:28) [test/regression/prototype/unit/ajax_test.html]:
+  TypeError: Null value, error=(TypeError: Null value)
+
+    3) Failed:
+  testUpdater (Unit test file | Ajax | default template | 2009-04-11 15:28) [test/regression/prototype/unit/ajax_test.html]:
+  Failure: assertEqual
+  expected: <'pack my box with <em>five dozen</em> liquor jugs! oh, how <strong>quickly</strong> daft jumping zebras vex...'>, actual: <''>
+  Failure: assertEqual
+  expected: <'pack my box with <em>five dozen</em> liquor jugs! oh, how <strong>quickly</strong> daft jumping zebras vex...'>, actual: <''>
+
+    4) Failed:
+  testUpdaterWithInsertion (Unit test file | Ajax | default template | 2009-04-11 15:28) [test/regression/prototype/unit/ajax_test.html]:
+  Failure: assertEqual
+  expected: <'pack my box with <em>five dozen</em> liquor jugs! oh, how <strong>quickly</strong> daft jumping zebras vex...'>, actual: <''>
+  Failure: assertEqual
+  expected: <'pack my box with <em>five dozen</em> liquor jugs! oh, how <strong>quickly</strong> daft jumping zebras vex...'>, actual: <''>
+  Failure: assertEqual
+  expected: <'five dozen'>, actual: <''>
+
+    5) Failed:
+  testResponseText (Unit test file | Ajax | default template | 2009-04-11 15:28) [test/regression/prototype/unit/ajax_test.html]:
+  Failure: assertEqual
+  expected: <'pack my box with <em>five dozen</em> liquor jugs! oh, how <strong>quickly</strong> daft jumping zebras vex...'>, actual: <''>
+
+    6) Failed:
+  testViewportDimensions (Unit test file | Dom | default template | 2009-04-11 15:28) [test/regression/prototype/unit/dom_test.html]:
+  Failure: NOTE: YOU MUST ALLOW JAVASCRIPT TO RESIZE YOUR WINDOW FOR THIS TEST TO PASS
+  expected: <50>, actual: <0>
+  Failure: NOTE: YOU MUST ALLOW JAVASCRIPT TO RESIZE YOUR WINDOW FOR THIS TEST TO PASS
+  expected: <50>, actual: <0>
+
+    7) Failed:
+  testFormRequest (Unit test file | Form | default template | 2009-04-11 15:28) [test/regression/prototype/unit/form_test.html]:
+  Failure: wrong default action for form element with empty action attribute
+  got <false>
+
+  Finished in 17.729032 seconds.
+
+  356 tests, 2237 assertions, 9 failures, 2 errors
