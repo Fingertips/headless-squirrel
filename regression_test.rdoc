@@ -1,0 +1,163 @@
+= The current state of the regression test suite
+
+This is mainly for me to remember what was failing before.
+
+  $ ./bin/jstest test/regression/**/unit/*_test.html
+  ..........................................................................................................................................F..
+  .............................................................................................................................................
+  ..........................................................................EEEEFF.F...F.F..EEE....FE.......F..............F...................
+  ......FFFFFFF......................E.....E.
+
+    1) Failed:
+  testViewportDimensions (Unit test file | Dom | default template | 2009-04-11 15:28) [test/regression/prototype/unit/dom_test.html]:
+  Failure: NOTE: YOU MUST ALLOW JAVASCRIPT TO RESIZE YOUR WINDOW FOR THIS TEST TO PASS
+  expected: <50>, actual: <0>
+  Failure: NOTE: YOU MUST ALLOW JAVASCRIPT TO RESIZE YOUR WINDOW FOR THIS TEST TO PASS
+  expected: <50>, actual: <0>
+
+    2) Error:
+  testAjaxAutocompleter (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/ajax_autocompleter_test.html]:
+  NOT_SUPPORTED_ERR: NOT_SUPPORTED_ERR: DOM Exception 9, error=(Error: NOT_SUPPORTED_ERR: DOM Exception 9)
+
+    3) Error:
+  testAfterUpdateElement (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/ajax_autocompleter_test.html]:
+  NOT_SUPPORTED_ERR: NOT_SUPPORTED_ERR: DOM Exception 9, error=(Error: NOT_SUPPORTED_ERR: DOM Exception 9)
+
+    4) Error:
+  testTokenizing (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/ajax_autocompleter_test.html]:
+  NOT_SUPPORTED_ERR: NOT_SUPPORTED_ERR: DOM Exception 9, error=(Error: NOT_SUPPORTED_ERR: DOM Exception 9)
+
+    5) Error:
+  testAjaxAutocompleterNoLinebreaksInResult (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/ajax_autocompleter_test.html]:
+  NOT_SUPPORTED_ERR: NOT_SUPPORTED_ERR: DOM Exception 9, error=(Error: NOT_SUPPORTED_ERR: DOM Exception 9)
+
+    6) Failed:
+  testInPlaceEditor (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/ajax_inplaceeditor_test.html]:
+  Failure: assertNull
+  got <undefined>
+  Failure: assertEqual
+  expected: <'transparent'>, actual: <'rgba(0, 0, 0, 0)'>
+  Failure: assertEqual
+  expected: <'transparent'>, actual: <'rgba(0, 0, 0, 0)'>
+  Failure: assertNull
+  got <undefined>
+
+    7) Failed:
+  testHovering (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/ajax_inplaceeditor_test.html]:
+  Failure: should be transparent after mouse leaves element
+  expected: <'transparent'>, actual: <'rgba(0, 0, 0, 0)'>
+
+    8) Failed:
+  testDisposesProperly (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/ajax_inplaceeditor_test.html]:
+  Failure: assertEqual
+  expected: <'transparent'>, actual: <'rgba(0, 0, 0, 0)'>
+  Failure: assertEqual
+  expected: <'transparent'>, actual: <'rgba(0, 0, 0, 0)'>
+
+    9) Failed:
+  testCantEditWhileSaving (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/ajax_inplaceeditor_test.html]:
+  Failure: assertEqual
+  expected: <'transparent'>, actual: <'rgba(0, 0, 0, 0)'>
+
+    10) Failed:
+  testCanUseExternalElementToGoIntoEditMode (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/ajax_inplaceeditor_test.html]:
+  Failure: external control created two forms
+  got <undefined>
+
+    11) Error:
+  testNewCallbacks (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/ajax_inplaceeditor_test.html]:
+  NOT_SUPPORTED_ERR: NOT_SUPPORTED_ERR: DOM Exception 9, error=(Error: NOT_SUPPORTED_ERR: DOM Exception 9)
+
+    12) Error:
+  testCallbackFunctionReturnTypes (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/ajax_inplaceeditor_test.html]:
+  NOT_SUPPORTED_ERR: NOT_SUPPORTED_ERR: DOM Exception 9, error=(Error: NOT_SUPPORTED_ERR: DOM Exception 9)
+
+    13) Error:
+  testHtmlResponse (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/ajax_inplaceeditor_test.html]:
+  NOT_SUPPORTED_ERR: NOT_SUPPORTED_ERR: DOM Exception 9, error=(Error: NOT_SUPPORTED_ERR: DOM Exception 9)
+
+    14) Failed:
+  testSubmitOnBlur (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/ajax_inplaceeditor_test.html]:
+  Failure: assertEqual
+  expected: <'New to be edited - edited'>, actual: <'To be edited'>
+
+    15) Error:
+  testEscReturnKeys (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/ajax_inplaceeditor_test.html]:
+  NOT_SUPPORTED_ERR: NOT_SUPPORTED_ERR: DOM Exception 9, error=(Error: NOT_SUPPORTED_ERR: DOM Exception 9)
+
+    16) Failed:
+  testBuilderBasics (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/builder_test.html]:
+  Failure: assertEqual
+  expected: <'text 123 &lt;blah&gt;'>, actual: <'text 123 &lt;blah>'>
+
+    17) Failed:
+  testDroppablesIsAffected (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/dragdrop_test.html]:
+  Failure: assert
+  got <false>
+
+    18) Failed:
+  testDynamicLoading (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/loading_test.html]:
+  Failure: assertNull
+  got <function klass() 
+  {
+  this.initialize.apply(this, arguments);
+  }>
+  Failure: assertNull
+  got <function klass() 
+  {
+  this.initialize.apply(this, arguments);
+  }>
+
+    19) Failed:
+  testPositionCloneFromAbsolute (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/position_clone_test.html]:
+  Failure: Clone to fixed child of absolute BODY child
+  expected: <'[120, 20]'>, actual: <'[128, 394]'>
+  Failure: Clone to fixed child of relative BODY child
+  expected: <'[120, 20]'>, actual: <'[128, 394]'>
+
+    20) Failed:
+  testPositionCloneFromRelative (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/position_clone_test.html]:
+  Failure: Clone to fixed child of absolute BODY child
+  expected: <'[128, 821]'>, actual: <'[136, 1672]'>
+  Failure: Clone to fixed child of relative BODY child
+  expected: <'[128, 821]'>, actual: <'[136, 1672]'>
+
+    21) Failed:
+  testPositionCloneFromStatic (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/position_clone_test.html]:
+  Failure: Clone to fixed child of absolute BODY child
+  expected: <'[8, 1228]'>, actual: <'[16, 2506]'>
+  Failure: Clone to fixed child of relative BODY child
+  expected: <'[8, 1228]'>, actual: <'[16, 2506]'>
+
+    22) Failed:
+  testPositionCloneFromAbsoluteWithHiddenTarget (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/position_clone_test.html]:
+  Failure: Clone to fixed child of absolute BODY child
+  expected: <'[120, 20]'>, actual: <'[128, 1675]'>
+  Failure: Clone to fixed child of relative BODY child
+  expected: <'[120, 20]'>, actual: <'[128, 1675]'>
+
+    23) Failed:
+  testPositionCloneFromRelativeWithHiddenTarget (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/position_clone_test.html]:
+  Failure: Clone to fixed child of absolute BODY child
+  expected: <'[128, 2102]'>, actual: <'[136, 4234]'>
+  Failure: Clone to fixed child of relative BODY child
+  expected: <'[128, 2102]'>, actual: <'[136, 4234]'>
+
+    24) Failed:
+  testPositionCloneFromStaticWithHiddenTarget (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/position_clone_test.html]:
+  Failure: Clone to fixed child of absolute BODY child
+  expected: <'[8, 2509]'>, actual: <'[16, 5068]'>
+  Failure: Clone to fixed child of relative BODY child
+  expected: <'[8, 2509]'>, actual: <'[16, 5068]'>
+
+    25) Error:
+  testStringParseStyle (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/string_test.html]:
+  ReferenceError: Can't find variable: assertInspect, error=(ReferenceError: Can't find variable: assertInspect)
+
+    26) Error:
+  testAssertReturns (script.aculo.us Unit test file) [test/regression/scriptaculous/unit/unittest_test.html]:
+  ReferenceError: Can't find variable: assertReturnsTrue, error=(ReferenceError: Can't find variable: assertReturnsTrue)
+
+  Finished in 52.179524 seconds.
+
+  466 tests, 3308 assertions, 28 failures, 10 errors
