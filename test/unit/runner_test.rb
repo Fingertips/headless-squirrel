@@ -6,11 +6,20 @@ module RunnerTestHelper
     @runner = JSTestSan::Runner.alloc.initWithHTMLFiles(files)
     
     @runner.stubs(:puts)
+    @runner.stubs(:print)
     @runner.test_cases.first.stubs(:run)
     @runner.test_cases.last.stubs(:run)
     
     OSX::NSApplication.sharedApplication.stubs(:run)
     OSX::NSApplication.sharedApplication.stubs(:terminate)
+  end
+  
+  private
+  
+  def test_stub(name)
+    test_case = JSTestSan::TestCase.alloc.initWithHTMLFile_delegate(fixture('a_unit_test.html'), stub_everything)
+    test_case.stubs(:title).returns("A test case with #{name}")
+    JSTestSan::TestCase::Test.new(test_case, name.to_s, name.to_sym, name.to_s)
   end
 end
 
@@ -85,19 +94,30 @@ describe "JSTestSan::Runner" do
     @runner.should.be.finished
   end
   
+  it "should return tests that have ran but didn't pass" do
+    test_case = stub(:title => 'A test case')
+    
+    @runner.test_ran(test_stub(:passed))
+    @runner.test_ran(test_stub(:failed))
+    @runner.test_ran(test_stub(:error))
+    
+    @runner.did_not_pass.first.name.should == 'failed'
+    @runner.did_not_pass.last.name.should == 'error'
+  end
+  
   it "should print a dot when a test ran and passed" do
     @runner.expects(:print).with('.')
-    @runner.test_ran(:passed)
+    @runner.test_ran(test_stub(:passed))
   end
   
   it "should print a F when a test ran and failed" do
     @runner.expects(:print).with('F')
-    @runner.test_ran(:failed)
+    @runner.test_ran(test_stub(:failed))
   end
   
   it "should print an E when a test ran and an error occured" do
     @runner.expects(:print).with('E')
-    @runner.test_ran(:error)
+    @runner.test_ran(test_stub(:error))
   end
 end
 
@@ -109,6 +129,16 @@ describe "JSTestSan::Runner, when finalizing" do
     time = Time.now
     @runner.instance_variable_set(:@start_time, time)
     Time.stubs(:now).returns(time + 2.3)
+  end
+  
+  it "should print the tests that did not pass" do
+    test1, test2 = test_stub(:failed), test_stub(:error)
+    @runner.test_ran(test1)
+    @runner.test_ran(test2)
+    
+    @runner.expects(:puts).with("\n  1) #{test1}")
+    @runner.expects(:puts).with("\n  2) #{test2}")
+    @runner.send(:finalize)
   end
   
   it "should print the time it took to run the tests" do

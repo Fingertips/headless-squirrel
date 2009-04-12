@@ -1,6 +1,8 @@
 require "osx/cocoa"
 OSX.require_framework 'WebKit'
 
+require 'js_test_san/test'
+
 module JSTestSan
   class TestCase < OSX::NSObject
     class FileDoesNotExistError < StandardError; end
@@ -9,7 +11,11 @@ module JSTestSan
       @sharedWebView ||= OSX::WebView.alloc.init
     end
     
-    attr_reader :html_file, :delegate
+    RESULTS_REGEXP = /^((\d+) tests, )?(\d+) assertions, (\d+) failures, (\d+) errors\n?/
+    
+    STATES = %w{ passed failed error }
+    
+    attr_reader :html_file, :delegate, :title
     attr_reader :tests, :assertions, :failures, :errors
     
     def initWithHTMLFile_delegate(html_file, delegate)
@@ -17,6 +23,7 @@ module JSTestSan
         raise FileDoesNotExistError, "The file `#{html_file}' does not exist." unless File.exist?(html_file)
         @html_file, @delegate = html_file, delegate
         @tests = @assertions = @failures = @errors = 0
+        @title = ''
         self
       end
     end
@@ -47,7 +54,8 @@ module JSTestSan
     
     # Not yet sure why the extra check for log not being nil is necessary.
     # Might be a test only thing.
-    def webView_didFinishLoadForFrame(webView, frame)
+    def webView_didFinishLoadForFrame(_, __)
+      @title = webView.mainFrameTitle.to_s
       [log, loglines].each do |element|
         element.addEventListener___('DOMSubtreeModified', self, true) if element
       end
@@ -59,8 +67,18 @@ module JSTestSan
       when OSX::DOMText
         finalize unless log.innerText == 'running...'
       else
-        klass = element.className
-        @delegate.test_ran(klass.to_sym) if %w{ passed failed error }.include?(klass)
+        parent = element.parentNode
+        state = parent.className
+        
+        if element == parent.lastChild && STATES.include?(state)
+          output = parent.children.item(2).innerText.to_s
+          return if output.empty?
+          
+          output.sub!(RESULTS_REGEXP, '')
+          name = parent.children.item(0).innerText
+          
+          @delegate.test_ran(Test.new(self, name, state.to_sym, output))
+        end
       end
     end
     
@@ -75,11 +93,9 @@ module JSTestSan
       webView
     end
     
-    RESULTS_REGEXP = /^(\d+) tests, (\d+) assertions, (\d+) failures, (\d+) errors$/
-    
     def finalize
       @finished = true
-      results = log.innerText.to_s.scan(RESULTS_REGEXP).first
+      results = log.innerText.to_s.scan(RESULTS_REGEXP).first[1..-1]
       @tests, @assertions, @failures, @errors = results.map { |x| x.to_i }
       @delegate.test_case_finished(self)
     end

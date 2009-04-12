@@ -2,15 +2,14 @@ require 'osx/cocoa'
 
 module JSTestSan
   class Runner < OSX::NSObject
-    attr_reader :test_cases, :queued
+    attr_reader :test_cases, :queued, :did_not_pass
     
     def initWithHTMLFiles(html_files)
       if init
         @test_cases = []
-        html_files.each do |file|
-          @test_cases << TestCase.alloc.initWithHTMLFile_delegate(file, self)
-        end
+        @test_cases = html_files.map { |file| TestCase.alloc.initWithHTMLFile_delegate(file, self) }
         @queued = @test_cases.dup
+        @did_not_pass = []
         
         $stdout.sync = true
         
@@ -29,8 +28,10 @@ module JSTestSan
     def failures;   sum :failures   end
     def errors;     sum :errors     end
     
-    def test_ran(state)
-      print case state
+    def test_ran(test)
+      @did_not_pass << test unless test.state == :passed
+      
+      print case test.state
       when :passed
         '.'
       when :failed
@@ -57,8 +58,12 @@ module JSTestSan
     
     def finalize
       @finished = true
+      
+      puts
+      @did_not_pass.each_with_index { |test, index| puts "\n  #{index+1}) #{test}" }
       puts "\nFinished in #{Time.now - @start_time} seconds."
       puts "\n#{tests} tests, #{assertions} assertions, #{failures} failures, #{errors} errors"
+      
       OSX::NSApplication.sharedApplication.terminate(self)
     end
   end

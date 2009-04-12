@@ -57,6 +57,11 @@ describe "JSTestSan::TestCase, when running" do
     @test_case.document.should.be.instance_of OSX::DOMHTMLDocument
   end
   
+  it "should have stored the document title" do
+    @test_case.title.should == 'A JSTestSan Unit Test HTML File'
+    @test_case.instance_variable_get(:@title).should == 'A JSTestSan Unit Test HTML File'
+  end
+  
   it "should return the `log' element" do
     @test_case.log.should.be.instance_of OSX::DOMHTMLDivElement
     @test_case.log.className.should == 'logsummary'
@@ -98,17 +103,49 @@ describe "JSTestSan::TestCase, when running" do
     @test_case.handleEvent(stubbed_log_event)
   end
   
-  %w{ passed failed error }.each do |type|
-    it "should let its delegate know a test ran if the targets class is `#{type}'" do
-      @delegate.expects(:test_ran).with(type.to_sym)
-      @test_case.handleEvent(stubbed_loglines_event(type))
-    end
-  end
-  
   it "should not let its delegate know a test ran if the targets class is not one of passed, failed, or error" do
     @delegate.expects(:test_ran).never
-    @test_case.handleEvent(stubbed_loglines_event(''))
-    @test_case.handleEvent(stubbed_loglines_event('foo'))
+    event = stubbed_loglines_event('passed')
+    
+    event.target.parentNode.stubs(:className).returns('')
+    @test_case.handleEvent(event)
+    
+    event.target.parentNode.stubs(:className).returns('foo')
+    @test_case.handleEvent(event)
+  end
+  
+  it "should not let its delegate know a test ran if the output is still empty" do
+    @delegate.expects(:test_ran).never
+    String.any_instance.stubs(:sub).returns('')
+    @test_case.handleEvent(stubbed_loglines_event('failed'))
+  end
+  
+  it "should let its delegate know a test ran if the targets class is one of passed, failed, or error" do
+    @test_case = JSTestSan::TestCase.alloc.initWithHTMLFile_delegate(fixture('a_unit_test.html'), @delegate)
+    
+    @delegate.expects(:test_ran).times(3).with do |test|
+      test.name.should == case test.state
+      when :passed
+        'testHelloWorldSuccess'
+      when :failed
+        'testHelloWorldFailure'
+      when :error
+        'testHelloWorldError'
+      end
+      
+      test.output.should == case test.state
+      when :passed
+        ""
+      when :failed
+        "Failure: assertEqual\nexpected: <'Hello world!'>, actual: <''>"
+      when :error
+        "TypeError: Value undefined (result of expression this.content.foo) is not object., error=(TypeError: Value undefined (result of expression this.content.foo) is not object.)"
+      end
+      
+      true # for mocha
+    end
+    
+    run_test_case!
   end
   
   private
@@ -123,8 +160,8 @@ describe "JSTestSan::TestCase, when running" do
   end
   
   def stubbed_loglines_event(klass)
-    element = @test_case.loglines.firstChild
-    element.stubs(:className).returns(klass.to_ns)
+    element = @test_case.loglines.getElementsByClassName(klass).item(0).children.item(3)
+    element.stubs(:parentNode).returns(@test_case.loglines.getElementsByClassName(klass).item(0))
     stub('Event', :target => element)
   end
 end
