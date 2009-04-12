@@ -317,7 +317,7 @@ new Test.Unit.Runner({
 
     // with empty action attribute
     request = $("ffe").request({ method: 'post' });
-    this.assert(request.url.include("/tmp/form_test.html"),
+    this.assert(request.url.include("/form_test.html"),
       'wrong default action for form element with empty action attribute');
   },
   

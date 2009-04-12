@@ -21,7 +21,7 @@ new Test.Unit.Runner({
     this.assertEqual("", $("content").innerHTML);
     
     this.assertEqual(0, Ajax.activeRequestCount);
-    new Ajax.Request("../fixtures/hello.js", {
+    new Ajax.Request("fixtures/hello.js", {
       asynchronous: false,
       method: 'GET',
       evalJS: 'force'
@@ -35,7 +35,7 @@ new Test.Unit.Runner({
   testAsynchronousRequest: function() {
     this.assertEqual("", $("content").innerHTML);
     
-    new Ajax.Request("../fixtures/hello.js", {
+    new Ajax.Request("fixtures/hello.js", {
       asynchronous: true,
       method: 'get',
       evalJS: 'force'
@@ -49,7 +49,7 @@ new Test.Unit.Runner({
   testUpdater: function() {
     this.assertEqual("", $("content").innerHTML);
     
-    new Ajax.Updater("content", "../fixtures/content.html", { method:'get' });
+    new Ajax.Updater("content", "fixtures/content.html", { method:'get' });
     
     this.wait(1000, function() {
       this.assertEqual(sentence, $("content").innerHTML.strip().toLowerCase());
@@ -58,9 +58,9 @@ new Test.Unit.Runner({
       this.assertEqual("", $("content").innerHTML);
        
       new Ajax.Updater({ success:"content", failure:"content2" },
-        "../fixtures/content.html", { method:'get', parameters:{ pet:'monkey' } });
+        "fixtures/content.html", { method:'get', parameters:{ pet:'monkey' } });
       
-      new Ajax.Updater("", "../fixtures/content.html", { method:'get', parameters:"pet=monkey" });
+      new Ajax.Updater("", "fixtures/content.html", { method:'get', parameters:"pet=monkey" });
       
       this.wait(1000, function() {
         this.assertEqual(sentence, $("content").innerHTML.strip().toLowerCase());
@@ -71,16 +71,16 @@ new Test.Unit.Runner({
   
   testUpdaterWithInsertion: function() {
     $('content').update();
-    new Ajax.Updater("content", "../fixtures/content.html", { method:'get', insertion: Insertion.Top });
+    new Ajax.Updater("content", "fixtures/content.html", { method:'get', insertion: Insertion.Top });
     this.wait(1000, function() {
       this.assertEqual(sentence, $("content").innerHTML.strip().toLowerCase());
       $('content').update();
-      new Ajax.Updater("content", "../fixtures/content.html", { method:'get', insertion: 'bottom' });      
+      new Ajax.Updater("content", "fixtures/content.html", { method:'get', insertion: 'bottom' });      
       this.wait(1000, function() {
         this.assertEqual(sentence, $("content").innerHTML.strip().toLowerCase());
         
         $('content').update();
-        new Ajax.Updater("content", "../fixtures/content.html", { method:'get', insertion: 'after' });      
+        new Ajax.Updater("content", "fixtures/content.html", { method:'get', insertion: 'after' });      
         this.wait(1000, function() {
           this.assertEqual('five dozen', $("content").next().innerHTML.strip().toLowerCase());
         });
@@ -222,11 +222,11 @@ new Test.Unit.Runner({
   },
 
   testResponseText: function() {
-    new Ajax.Request("../fixtures/empty.html", extendDefault({
+    new Ajax.Request("fixtures/empty.html", extendDefault({
       onComplete: function(transport) { this.assertEqual('', transport.responseText) }.bind(this)
     }));
     
-    new Ajax.Request("../fixtures/content.html", extendDefault({
+    new Ajax.Request("fixtures/content.html", extendDefault({
       onComplete: function(transport) { this.assertEqual(sentence, transport.responseText.toLowerCase()) }.bind(this)
     }));
   },
