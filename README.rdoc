@@ -24,60 +24,27 @@ To automatically run your test see http://github.com/alloy/kicker/tree/master.
 
 You betcha! (See the example.)
 
-But these shouldn't likely be a typical use case outside of testing the
-Prototype implementation, I hope. So it actually works quite well seeing how
-many tests pass ;)
+But these shouldn't likely be a typical use case, I hope. So it actually works
+quite well seeing how many tests pass ;) The one that does fail has to do with
+the fact that there's no window at all. I haven't yet tried if it will simply
+work with a NSWindow.
 
 == Example:
 
 This is the output of the regression tests which are the Prototype unit tests:
 
   $ ./bin/jstest test/regression/prototype/unit/*_test.html
-  EEFF.......F..............................................................................................................................F
-  ..............................................................F............................................................................
-  ..............................................................................
+  ...................................................................................................................................
+  .......F...........................................................................................................................
+  ..............................................................................................
 
-    1) Error:
-  testSynchronousRequest (Unit test file | Ajax | default template | 2009-04-11 15:28) [test/regression/prototype/unit/ajax_test.html]:
-  TypeError: Null value, error=(TypeError: Null value)
-
-    2) Error:
-  testAsynchronousRequest (Unit test file | Ajax | default template | 2009-04-11 15:28) [test/regression/prototype/unit/ajax_test.html]:
-  TypeError: Null value, error=(TypeError: Null value)
-
-    3) Failed:
-  testUpdater (Unit test file | Ajax | default template | 2009-04-11 15:28) [test/regression/prototype/unit/ajax_test.html]:
-  Failure: assertEqual
-  expected: <'pack my box with <em>five dozen</em> liquor jugs! oh, how <strong>quickly</strong> daft jumping zebras vex...'>, actual: <''>
-  Failure: assertEqual
-  expected: <'pack my box with <em>five dozen</em> liquor jugs! oh, how <strong>quickly</strong> daft jumping zebras vex...'>, actual: <''>
-
-    4) Failed:
-  testUpdaterWithInsertion (Unit test file | Ajax | default template | 2009-04-11 15:28) [test/regression/prototype/unit/ajax_test.html]:
-  Failure: assertEqual
-  expected: <'pack my box with <em>five dozen</em> liquor jugs! oh, how <strong>quickly</strong> daft jumping zebras vex...'>, actual: <''>
-  Failure: assertEqual
-  expected: <'pack my box with <em>five dozen</em> liquor jugs! oh, how <strong>quickly</strong> daft jumping zebras vex...'>, actual: <''>
-  Failure: assertEqual
-  expected: <'five dozen'>, actual: <''>
-
-    5) Failed:
-  testResponseText (Unit test file | Ajax | default template | 2009-04-11 15:28) [test/regression/prototype/unit/ajax_test.html]:
-  Failure: assertEqual
-  expected: <'pack my box with <em>five dozen</em> liquor jugs! oh, how <strong>quickly</strong> daft jumping zebras vex...'>, actual: <''>
-
-    6) Failed:
+    1) Failed:
   testViewportDimensions (Unit test file | Dom | default template | 2009-04-11 15:28) [test/regression/prototype/unit/dom_test.html]:
   Failure: NOTE: YOU MUST ALLOW JAVASCRIPT TO RESIZE YOUR WINDOW FOR THIS TEST TO PASS
   expected: <50>, actual: <0>
   Failure: NOTE: YOU MUST ALLOW JAVASCRIPT TO RESIZE YOUR WINDOW FOR THIS TEST TO PASS
   expected: <50>, actual: <0>
 
-    7) Failed:
-  testFormRequest (Unit test file | Form | default template | 2009-04-11 15:28) [test/regression/prototype/unit/form_test.html]:
-  Failure: wrong default action for form element with empty action attribute
-  got <false>
+  Finished in 17.725139 seconds.
 
-  Finished in 17.729032 seconds.
-
-  356 tests, 2237 assertions, 9 failures, 2 errors
+  356 tests, 2246 assertions, 2 failures, 0 errors
