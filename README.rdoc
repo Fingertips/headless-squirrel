@@ -18,6 +18,8 @@ the html/js files manually.
   $ sudo gem install alloy-js-test-san -s http://gems.github.com
   $ jstest path/to/a/unit_test.html
 
+To automatically run your test see http://github.com/alloy/kicker/tree/master.
+
 == Problems?
 
 You betcha! (See the example.)
