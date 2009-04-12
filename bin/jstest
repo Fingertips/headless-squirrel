@@ -3,4 +3,8 @@
 $:.unshift File.expand_path('../../lib', __FILE__)
 require 'js_test_san'
 
-JSTestSan::Runner.alloc.initWithHTMLFiles(ARGV).run
+if ARGV.empty?
+  puts "Usage: #{$0} [html files]"
+else
+  JSTestSan::Runner.alloc.initWithHTMLFiles(ARGV).run
+end
