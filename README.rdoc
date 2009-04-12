@@ -27,7 +27,7 @@ You betcha! (See the example.)
 But these shouldn't likely be a typical use case, I hope. So it actually works
 quite well seeing how many tests pass ;) The one that does fail has to do with
 the fact that there's no window at all. I haven't yet tried if it will simply
-work with a NSWindow.
+work with a NSWindow. Also not sure yet why the end result says 2 failures…
 
 == Example:
 
