@@ -2,8 +2,8 @@
 
 Gem::Specification.new do |s|
   s.name = %q{js-test-san}
-  s.version = "0.1.0"
-  
+  s.version = "0.1.1"
+
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Eloy Duran"]
   s.date = %q{2009-04-12}
@@ -118,11 +118,11 @@ Gem::Specification.new do |s|
     "test/unit/test_case_test.rb",
     "test/unit/test_test.rb"
   ]
-  
+
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 2
-    
+
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
     else
     end
