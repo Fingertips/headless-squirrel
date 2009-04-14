@@ -120,6 +120,7 @@ describe "HeadlessSquirrel::TestCase, when running" do
     @test_case.handleEvent(stubbed_loglines_event('failed'))
   end
   
+  # Eloy: Fails on my Mac Pro at the office, maybe because I've installed the Safari 4 beta?
   it "should let its delegate know a test ran if the targets class is one of passed, failed, or error" do
     @test_case = HeadlessSquirrel::TestCase.alloc.initWithHTMLFile_delegate(fixture('a_unit_test.html'), @delegate)
     
