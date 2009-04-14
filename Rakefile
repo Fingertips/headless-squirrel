@@ -30,10 +30,20 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gemspec|
     gemspec.name = "headless-squirrel"
-    gemspec.summary = gemspec.description = "A command-line JavaScript test runner for the Mac."
-    gemspec.email = "eloy.de.enige@gmail.com"
+    gemspec.summary = "A command-line JavaScript test runner for the Mac."
+    gemspec.description = "A OS X command line tool to run JavaScript (Prototype) unit tests from the comfort of your terminal."
     gemspec.homepage = "http://github.com/Fingertips/headless-squirrel/tree/master"
+    
+    gemspec.email = "eloy.de.enige@gmail.com"
     gemspec.authors = ["Eloy Duran"]
+  end
+rescue LoadError
+end
+
+begin
+  require 'jewelry_portfolio/tasks'
+  JewelryPortfolio::Tasks.new do |p|
+    p.account = 'Fingertips'
   end
 rescue LoadError
 end
