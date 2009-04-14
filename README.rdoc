@@ -2,6 +2,8 @@
 
 A JavaScript test runner to run tests from the comfort of your terminal.
 
+http://github.com/Fingertips/headless-squirrel/raw/master/html/images/headless-squirrel.png
+
 == Why?
 
 Because we want to run tests in a real browser environment, in our case WebKit,
