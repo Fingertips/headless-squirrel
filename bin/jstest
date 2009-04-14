@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
 
 $:.unshift File.expand_path('../../lib', __FILE__)
-require 'js_test_san'
+require 'headless_squirrel'
 
 if ARGV.empty?
   puts "Usage: #{$0} [html files]"
 else
-  JSTestSan::Runner.alloc.initWithHTMLFiles(ARGV).run
+  HeadlessSquirrel::Runner.alloc.initWithHTMLFiles(ARGV).run
 end

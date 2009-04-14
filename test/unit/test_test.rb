@@ -1,12 +1,12 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-describe "JSTestSan::TestCase::Test" do
+describe "HeadlessSquirrel::TestCase::Test" do
   before do
     @delegate = stub_everything('delegate')
-    @test_case = JSTestSan::TestCase.alloc.initWithHTMLFile_delegate(fixture('a_unit_test.html'), @delegate)
+    @test_case = HeadlessSquirrel::TestCase.alloc.initWithHTMLFile_delegate(fixture('a_unit_test.html'), @delegate)
     @test_case.instance_variable_set(:@title, 'A test case')
     
-    @test = JSTestSan::TestCase::Test.new(@test_case, 'testHelloWorld', :failed, 'did not meet expectation')
+    @test = HeadlessSquirrel::TestCase::Test.new(@test_case, 'testHelloWorld', :failed, 'did not meet expectation')
   end
   
   it "should initialize with a TestCase, name, state and output" do

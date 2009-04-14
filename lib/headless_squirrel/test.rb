@@ -1,4 +1,4 @@
-module JSTestSan
+module HeadlessSquirrel
   class TestCase < OSX::NSObject
     class Test
       attr_reader :test_case, :name, :state, :output

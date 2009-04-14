@@ -1,15 +1,15 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-describe "JSTestSan::TestCase, class methods" do
+describe "HeadlessSquirrel::TestCase, class methods" do
   it "should return a shared WebView instance" do
-    JSTestSan::TestCase.sharedWebView.should.be.instance_of OSX::WebView
+    HeadlessSquirrel::TestCase.sharedWebView.should.be.instance_of OSX::WebView
   end
 end
 
-describe "JSTestSan::TestCase" do
+describe "HeadlessSquirrel::TestCase" do
   before do
     @delegate = stub_everything('delegate')
-    @test_case = JSTestSan::TestCase.alloc.initWithHTMLFile_delegate(fixture('a_unit_test.html'), @delegate)
+    @test_case = HeadlessSquirrel::TestCase.alloc.initWithHTMLFile_delegate(fixture('a_unit_test.html'), @delegate)
   end
   
   it "should initialize with a html file and delegate" do
@@ -19,12 +19,12 @@ describe "JSTestSan::TestCase" do
   
   it "should raise a FileDoesNotExistError if the given html file does not exist" do
     lambda {
-      JSTestSan::TestCase.alloc.initWithHTMLFile_delegate('/does/not/exist/test.html', @delegate)
-    }.should.raise JSTestSan::TestCase::FileDoesNotExistError
+      HeadlessSquirrel::TestCase.alloc.initWithHTMLFile_delegate('/does/not/exist/test.html', @delegate)
+    }.should.raise HeadlessSquirrel::TestCase::FileDoesNotExistError
   end
   
   it "should instantiate a WebView with the html file and set itself as the frameLoadDelegate" do
-    @test_case.webView.should == JSTestSan::TestCase.sharedWebView
+    @test_case.webView.should == HeadlessSquirrel::TestCase.sharedWebView
     @test_case.webView.mainFrameURL.should == "file://#{fixture('a_unit_test.html')}"
     @test_case.webView.frameLoadDelegate.should == @test_case
   end
@@ -46,10 +46,10 @@ describe "JSTestSan::TestCase" do
   end
 end
 
-describe "JSTestSan::TestCase, when running" do
+describe "HeadlessSquirrel::TestCase, when running" do
   before do
     @delegate = stub_everything('delegate')
-    @test_case = JSTestSan::TestCase.alloc.initWithHTMLFile_delegate(fixture('a_unit_test.html'), @delegate)
+    @test_case = HeadlessSquirrel::TestCase.alloc.initWithHTMLFile_delegate(fixture('a_unit_test.html'), @delegate)
     run_test_case!
   end
   
@@ -58,8 +58,8 @@ describe "JSTestSan::TestCase, when running" do
   end
   
   it "should have stored the document title" do
-    @test_case.title.should == 'A JSTestSan Unit Test HTML File'
-    @test_case.instance_variable_get(:@title).should == 'A JSTestSan Unit Test HTML File'
+    @test_case.title.should == 'A HeadlessSquirrel Unit Test HTML File'
+    @test_case.instance_variable_get(:@title).should == 'A HeadlessSquirrel Unit Test HTML File'
   end
   
   it "should return the `log' element" do
@@ -121,7 +121,7 @@ describe "JSTestSan::TestCase, when running" do
   end
   
   it "should let its delegate know a test ran if the targets class is one of passed, failed, or error" do
-    @test_case = JSTestSan::TestCase.alloc.initWithHTMLFile_delegate(fixture('a_unit_test.html'), @delegate)
+    @test_case = HeadlessSquirrel::TestCase.alloc.initWithHTMLFile_delegate(fixture('a_unit_test.html'), @delegate)
     
     @delegate.expects(:test_ran).times(3).with do |test|
       test.name.should == case test.state

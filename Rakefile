@@ -5,7 +5,7 @@ task :test do
   sh "specrb -s #{Dir['test/unit/*_test.rb'].join(' ')}"
 end
 
-# JSTestSan::Rake::Runner.new :regression do |t|
+# HeadlessSquirrel::Rake::Runner.new :regression do |t|
 #   t.files = Dir['test/regression/prototype/unit/*.html']
 # end
 
@@ -29,10 +29,10 @@ end
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gemspec|
-    gemspec.name = "js-test-san"
-    gemspec.summary = gemspec.description = "A JavaScript test runner which runs from the comfort of the terminal. OS X only."
+    gemspec.name = "headless-squirrel"
+    gemspec.summary = gemspec.description = "A command-line JavaScript test runner for the Mac."
     gemspec.email = "eloy.de.enige@gmail.com"
-    gemspec.homepage = "http://github.com/alloy/js-test-san/tree/master"
+    gemspec.homepage = "http://github.com/Fingertips/headless-squirrel/tree/master"
     gemspec.authors = ["Eloy Duran"]
   end
 rescue LoadError

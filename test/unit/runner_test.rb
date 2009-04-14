@@ -3,7 +3,7 @@ require File.expand_path('../../test_helper', __FILE__)
 module RunnerTestHelper
   def setup
     files = [fixture('a_unit_test.html'), fixture('a_unit_test.html')]
-    @runner = JSTestSan::Runner.alloc.initWithHTMLFiles(files)
+    @runner = HeadlessSquirrel::Runner.alloc.initWithHTMLFiles(files)
     
     @runner.stubs(:puts)
     @runner.stubs(:print)
@@ -17,16 +17,16 @@ module RunnerTestHelper
   private
   
   def test_stub(name)
-    test_case = JSTestSan::TestCase.alloc.initWithHTMLFile_delegate(fixture('a_unit_test.html'), stub_everything)
+    test_case = HeadlessSquirrel::TestCase.alloc.initWithHTMLFile_delegate(fixture('a_unit_test.html'), stub_everything)
     test_case.stubs(:title).returns("A test case with #{name}")
-    JSTestSan::TestCase::Test.new(test_case, name.to_s, name.to_sym, name.to_s)
+    HeadlessSquirrel::TestCase::Test.new(test_case, name.to_s, name.to_sym, name.to_s)
   end
 end
 
-describe "JSTestSan::Runner" do
+describe "HeadlessSquirrel::Runner" do
   include RunnerTestHelper
   
-  it "should have instantiated a JSTestSan::TestCase for each html file" do
+  it "should have instantiated a HeadlessSquirrel::TestCase for each html file" do
     @runner.test_cases.length.should == 2
     @runner.test_cases.each do |test_case|
       test_case.html_file.should == fixture('a_unit_test.html')
@@ -121,7 +121,7 @@ describe "JSTestSan::Runner" do
   end
 end
 
-describe "JSTestSan::Runner, when finalizing" do
+describe "HeadlessSquirrel::Runner, when finalizing" do
   include RunnerTestHelper
   
   def setup

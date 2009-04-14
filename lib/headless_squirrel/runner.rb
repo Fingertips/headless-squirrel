@@ -1,6 +1,6 @@
 require 'osx/cocoa'
 
-module JSTestSan
+module HeadlessSquirrel
   class Runner < OSX::NSObject
     attr_reader :test_cases, :queued, :did_not_pass
     

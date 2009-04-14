@@ -1,9 +1,9 @@
 require "osx/cocoa"
 OSX.require_framework 'WebKit'
 
-require 'js_test_san/test'
+require 'headless_squirrel/test'
 
-module JSTestSan
+module HeadlessSquirrel
   class TestCase < OSX::NSObject
     class FileDoesNotExistError < StandardError; end
     

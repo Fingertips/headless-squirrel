@@ -1,7 +1,6 @@
-= JSTestSan
+= Headless Squirrel
 
-A JavaScript test runner to run JavaScript tests from the comfort of your
-terminal.
+A JavaScript test runner to run tests from the comfort of your terminal.
 
 == Why?
 
@@ -13,9 +12,11 @@ browsers as well, you know, html and js… This way we can run the tests from th
 terminal during regular development but still test on other browsers by loading
 the html/js files manually.
 
+Read more at http://superalloy.nl/2009/04/13/js-test-san.html
+
 == Install & Usage
 
-  $ sudo gem install alloy-js-test-san -s http://gems.github.com
+  $ sudo gem install Fingertips-headless-squirrel -s http://gems.github.com
   $ jstest path/to/a/unit_test.html
 
 To automatically run your test see http://github.com/alloy/kicker/tree/master.
@@ -48,3 +49,5 @@ This is the output of the regression tests which are the Prototype unit tests:
   Finished in 17.725139 seconds.
 
   356 tests, 2246 assertions, 2 failures, 0 errors
+
+See regression_test.rdoc[link:regression_test.rdoc] for more tests.
