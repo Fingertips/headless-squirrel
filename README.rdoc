@@ -52,4 +52,4 @@ This is the output of the regression tests which are the Prototype unit tests:
 
   356 tests, 2246 assertions, 2 failures, 0 errors
 
-See regression_test.rdoc[link:regression_test.rdoc] for more tests.
+See regression_test.rdoc[http://github.com/Fingertips/headless-squirrel/blob/master/regression_test.rdoc] for more tests.
