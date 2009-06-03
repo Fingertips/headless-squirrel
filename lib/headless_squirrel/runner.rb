@@ -61,7 +61,7 @@ module HeadlessSquirrel
       
       puts
       @did_not_pass.each_with_index { |test, index| puts "\n  #{index+1}) #{test}" }
-      puts "\nFinished in #{Time.now - @start_time} seconds."
+      puts "Finished in #{Time.now - @start_time} seconds."
       puts "\n#{tests} tests, #{assertions} assertions, #{failures} failures, #{errors} errors"
       
       OSX::NSApplication.sharedApplication.terminate(self)

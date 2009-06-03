@@ -83,9 +83,16 @@ module HeadlessSquirrel
     
     def handleEvent(event)
       element = event.target
+      
       case element
+      when OSX::DOMText
+        contents = element.wholeText.to_s
       when OSX::DOMHTMLTableCellElement, OSX::DOMHTMLDivElement
-        if result = self.class.parse_result(element.innerText.to_s)
+        contents = element.innerText.to_s
+      end
+      
+      if contents
+        if result = self.class.parse_result(contents)
           if result[:tests]
             finalize_test_suite(result)
           else
