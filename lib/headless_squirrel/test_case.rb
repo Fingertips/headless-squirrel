@@ -11,7 +11,8 @@ module HeadlessSquirrel
       @sharedWebView ||= OSX::WebView.alloc.init
     end
     
-    RESULTS_REGEXP = /^((\d+) tests, )?(\d+) assertions, (\d+) failures, (\d+) errors\n?/
+    RESULTS_REGEXP_KEYS = [:report, :_, :tests, :assertions, :failures, :errors]
+    RESULTS_REGEXP = /((\d+) tests, )?(\d+) assertions, (\d+) failures, (\d+) errors\n?/
     
     STATES = %w{ passed failed error }
     
@@ -44,12 +45,13 @@ module HeadlessSquirrel
       webView.mainFrame.DOMDocument
     end
     
+    
     def log
-      document.getElementsByClassName('logsummary').item(0)
+      document.getElementsByClassName('logsummary').item(0) || document.getElementById('logsummary')
     end
     
     def loglines
-      document.getElementsByClassName('loglines').item(0)
+      document.getElementsByClassName('loglines').item(0) || document.getElementById('loglines')
     end
     
     # Not yet sure why the extra check for log not being nil is necessary.
@@ -82,20 +84,13 @@ module HeadlessSquirrel
     def handleEvent(event)
       element = event.target
       case element
-      when OSX::DOMText
-        finalize unless log.innerText == 'running...'
-      else
-        parent = element.parentNode
-        state = parent.className
-        
-        if element == parent.lastChild && STATES.include?(state)
-          output = parent.children.item(2).innerText.to_s
-          return if output.empty?
-          
-          output.sub!(RESULTS_REGEXP, '')
-          name = parent.children.item(0).innerText
-          
-          @delegate.test_ran(Test.new(self, name, state.to_sym, output))
+      when OSX::DOMHTMLTableCellElement, OSX::DOMHTMLDivElement
+        if result = self.class.parse_result(element.innerText.to_s)
+          if result[:tests]
+            finalize_test_suite(result)
+          else
+            finalize_test(result)
+          end
         end
       end
     end
@@ -111,11 +106,40 @@ module HeadlessSquirrel
       webView
     end
     
-    def finalize
+    def finalize_test(result)
+      last_line = loglines.children.item(loglines.children.length-1)
+      log_row = self.class.parse_log_row(last_line)
+      
+      @delegate.test_ran(Test.new(self, log_row[:name], log_row[:state].to_sym, result[:message]))
+    end
+    
+    def finalize_test_suite(result)
       @finished = true
-      results = log.innerText.to_s.scan(RESULTS_REGEXP).first[1..-1]
-      @tests, @assertions, @failures, @errors = results.map { |x| x.to_i }
+      @tests, @assertions, @failures, @errors = result[:tests].to_i, result[:assertions].to_i, result[:failures].to_i, result[:errors].to_i
       @delegate.test_case_finished(self)
+    end
+    
+    def self.parse_result(line)
+      if match = RESULTS_REGEXP.match(line)
+        result = Hash[*RESULTS_REGEXP_KEYS.zip(match.to_a).flatten]
+        result[:message] = line.sub(result[:report], '')
+        result
+      end
+    end
+    
+    def self.parse_log_row(row)
+      parts = []
+      0.upto(row.children.length-1) do |i|
+        parts << row.children.item(i).innerText.to_s.strip
+      end
+      
+      # Recent version of unittest.js
+      if STATES.include?(parts.first)
+        { :state => parts[0], :name => parts[1] }
+      # Older version
+      else
+        { :state => parts[1], :name => parts[0] }
+      end
     end
   end
 end
