@@ -2,6 +2,7 @@ require "osx/cocoa"
 OSX.require_framework 'WebKit'
 
 require 'headless_squirrel/test'
+require 'headless_squirrel/console'
 
 module HeadlessSquirrel
   class TestCase < OSX::NSObject
@@ -61,6 +62,10 @@ module HeadlessSquirrel
       [log, loglines].each do |element|
         element.addEventListener___('DOMSubtreeModified', self, true) if element
       end
+    end
+    
+    def webView_didClearWindowObject_forFrame(_, scriptObject, __)
+      scriptObject.setValue_forKey(HeadlessSquirrel::Console.alloc.init, 'console')
     end
     
     # Catches resource load errors:
