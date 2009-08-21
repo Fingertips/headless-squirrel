@@ -87,13 +87,6 @@ describe "HeadlessSquirrel::TestCase, when running" do
     @test_case.webView_didFinishLoadForFrame(nil, nil)
   end
   
-  xit "should not have finished yet if the inner html of the `log' element is `running...'" do
-    @test_case.instance_variable_set(:@finished, nil)
-    @test_case.log.stubs(:innerText).returns('running...')
-    @test_case.handleEvent(stubbed_log_event)
-    @test_case.should.not.be.finished
-  end
-  
   it "should have finished once the inner html of the `log' element is not longer `running...'" do
     @test_case.instance_variable_set(:@finished, nil)
     @test_case.handleEvent(stubbed_log_event)
