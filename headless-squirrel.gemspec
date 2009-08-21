@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{headless-squirrel}
-  s.version = "0.4.0"
+  s.version = "0.5.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Eloy Duran"]
-  s.date = %q{2009-06-17}
+  s.date = %q{2009-08-21}
   s.default_executable = %q{jstest}
   s.description = %q{A OS X command line tool to run JavaScript (Prototype) unit tests from the comfort of your terminal.}
   s.email = %q{eloy.de.enige@gmail.com}
@@ -26,6 +26,10 @@ Gem::Specification.new do |s|
     "lib/headless_squirrel/test_case.rb",
     "test/fixtures/a_unit_test.html",
     "test/fixtures/a_unit_test.js",
+    "test/fixtures/syntax_error.html",
+    "test/fixtures/syntax_error.js",
+    "test/fixtures/type_error.html",
+    "test/fixtures/type_error.js",
     "test/regression/prototype/unit/ajax_test.html",
     "test/regression/prototype/unit/array_test.html",
     "test/regression/prototype/unit/assets/prototype.js",
