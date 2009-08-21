@@ -177,33 +177,38 @@ describe "HeadlessSquirrel::TestCase, when running a file with problems" do
     @delegate = stub_everything('delegate')
   end
   
-  it "should raise a HeadlessSquirrel::TestCase::JSError if a syntax error was encountered in the JavaScript" do
-    klass, message, caller = exception_raised_while_running('syntax_error.html')
-    
-    klass.should   == HeadlessSquirrel::TestCase::JSError
+  it "should warn and terminate if a syntax error was encountered in the JavaScript" do
+    OSX::NSApplication.sharedApplication.expects(:terminate)
+    message = message_printed_while_running('syntax_error.html')
     message.should == "#{fixture('syntax_error.js')}:4: SyntaxError: Parse error"
-    caller.should  == []
   end
   
-  it "should raise a HeadlessSquirrel::TestCase::JSError if a type error was raised from the JavaScript runtime" do
-    klass, message, caller = exception_raised_while_running('type_error.html')
-    
-    klass.should   == HeadlessSquirrel::TestCase::JSError
+  it "should warn and terminate if a type error was raised from the JavaScript runtime" do
+    OSX::NSApplication.sharedApplication.expects(:terminate)
+    message = message_printed_while_running('type_error.html')
     message.should == "#{fixture('type_error.js')}:1: TypeError: Result of expression 'this.doesNotExist' [undefined] is not a function."
-    caller.should  == []
+  end
+  
+  it "should only warn if a message was logged which does not match the error regexp" do
+    @test_case = HeadlessSquirrel::TestCase.alloc.initWithHTMLFile_delegate(fixture('a_unit_test.html'), @delegate)
+    info = { 'message' => 'some other message', 'sourceURL' => 'file:///some/file.js', 'lineNumber' => '1' }
+    
+    OSX::NSApplication.sharedApplication.expects(:terminate).never
+    @test_case.expects(:puts).with("/some/file.js:1: some other message")
+    @test_case.webView_addMessageToConsole(@test_case.webView, info)
   end
   
   private
   
-  def exception_raised_while_running(fixture)
+  def message_printed_while_running(fixture)
     @test_case = HeadlessSquirrel::TestCase.alloc.initWithHTMLFile_delegate(fixture(fixture), @delegate)
     
-    def @test_case.raise(*args)
-      @raised_exception = args
+    def @test_case.puts(message)
+      @printed_message = message
       @finished = true
     end
     
     run_test_case!
-    @test_case.instance_variable_get(:@raised_exception)
+    @test_case.instance_variable_get(:@printed_message)
   end
 end

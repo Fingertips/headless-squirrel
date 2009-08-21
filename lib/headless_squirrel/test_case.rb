@@ -6,7 +6,6 @@ require 'headless_squirrel/console'
 
 module HeadlessSquirrel
   class TestCase < OSX::NSObject
-    class JSError < StandardError; end
     class FileDoesNotExistError < StandardError; end
     
     def self.sharedWebView
@@ -79,12 +78,8 @@ module HeadlessSquirrel
     # end
     
     def webView_addMessageToConsole(_, info)
-      message = format_js_log(info)
-      if info['message'].to_s =~ /^[A-Z]\w+Error/
-        raise JSError, message, []
-      else
-        puts message
-      end
+      puts format_js_log(info)
+      OSX::NSApplication.sharedApplication.terminate(self) if info['message'].to_s =~ /^[A-Z]\w+Error/
     end
     
     def handleEvent(event)
@@ -121,7 +116,7 @@ module HeadlessSquirrel
     end
     
     def format_js_log(info)
-      "#{info['sourceURL'].sub(/^file:\/+/, '/')}:#{info['lineNumber']}: #{info['message']}"
+      "#{info['sourceURL'][7..-1]}:#{info['lineNumber']}: #{info['message']}"
     end
     
     def finalize_test(result)
