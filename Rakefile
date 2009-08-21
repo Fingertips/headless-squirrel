@@ -2,7 +2,7 @@ task :default => :test
 
 desc "Run the tests"
 task :test do
-  sh "ruby #{Dir['test/unit/*_test.rb'].join(' ')}"
+  sh "ruby -r#{Dir['test/unit/*_test.rb'].join(' -r')} -e ''"
 end
 
 # HeadlessSquirrel::Rake::Runner.new :regression do |t|

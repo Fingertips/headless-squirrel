@@ -6,6 +6,7 @@ require 'headless_squirrel/console'
 
 module HeadlessSquirrel
   class TestCase < OSX::NSObject
+    class JSError < StandardError; end
     class FileDoesNotExistError < StandardError; end
     
     def self.sharedWebView
@@ -46,7 +47,6 @@ module HeadlessSquirrel
       webView.mainFrame.DOMDocument
     end
     
-    
     def log
       document.getElementsByClassName('logsummary').item(0) || document.getElementById('logsummary')
     end
@@ -78,13 +78,14 @@ module HeadlessSquirrel
     #   @delegate.test_case_finished(self)
     # end
     
-    # Logs js errors:
-    #
-    # webView.setUIDelegate(self)
-    #
-    # def webView_addMessageToConsole(_, msg)
-    #   p msg
-    # end
+    def webView_addMessageToConsole(_, info)
+      message = format_js_log(info)
+      if info['message'].to_s =~ /^[A-Z]\w+Error/
+        raise JSError, message, []
+      else
+        puts message
+      end
+    end
     
     def handleEvent(event)
       element = event.target
@@ -115,7 +116,12 @@ module HeadlessSquirrel
       webView = self.class.sharedWebView
       webView.mainFrame.loadRequest(req)
       webView.frameLoadDelegate = self
+      webView.setUIDelegate(self)
       webView
+    end
+    
+    def format_js_log(info)
+      "#{info['sourceURL'].sub(/^file:\/+/, '/')}:#{info['lineNumber']}: #{info['message']}"
     end
     
     def finalize_test(result)
