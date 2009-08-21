@@ -142,7 +142,7 @@ describe "HeadlessSquirrel::Runner, when finalizing" do
   end
   
   it "should print the time it took to run the tests" do
-    @runner.expects(:puts).with("\nFinished in 2.3 seconds.")
+    @runner.expects(:puts).with("Finished in 2.3 seconds.")
     @runner.send(:finalize)
   end
   
